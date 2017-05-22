@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<div>
+    <div class="searchContainer">
+        <input type="text" ng-model="searchEvento" placeholder="Evento..." id="search" class="search rounded"/>
+    </div>
+    <div id="messageContainer" ng-hide="showMessage" ng-class="{'errorDiv' : errorMessage, 'successDiv' : successMessage}">
+        {{generalMessage}} 
+    </div>
+    <form name="eventForm" ng-submit="persistEvent()">
+        <fieldset>
+            <table class="table tableWithForm">
+                <thead>
+                    <tr>
+                        <th style="display:none">
+                            <input type="number" ng-model="evento.id"/>
+                        </th>
+                        <th>
+                            <input type="text" ng-model="evento.descripcion" placeholder="Evento"  class="rounded" name="evento" required pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]*"/>
+                        </th>
+                        <th>
+                            <input type="currency" ng-model="evento.costo" placeholder="Costo"  class="rounded" name="costo" required />
+                        </th>
+                        <th>
+                            <select name="tipoClase" ng-model="tipoClase" ng-options="tipoEvento.value as tipoEvento.tipoClase for tipoEvento in tiposClase">
+                            </select>
+                        </th>
+                        <th>
+                            <input type="number" ng-model="evento.diasMes" placeholder="Clases al Mes" class="rounded" name="clasesAlMes" ng-hide="tipoClase" ng-required="!tipoClase"/>
+                        </th>
+                        <th>
+                            <select ng-model="evento.clases" name="clases"  ng-options="activo.value as activo.status for activo in activos">
+                            </select>
+                        </th>
+                        <th>
+                            <select ng-model="evento.status" name="status"  ng-options="activo.value as activo.status for activo in activos">
+                            </select>
+                        </th>
+                        <th >
+                            <input type="submit" class="addBtn" value="Guardar" name="add"/>
+
+                            <input type="reset" class="clearBtn" value="Limpiar" name="clear"/>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </fieldset>
+    </form>
+    <table class="table table-zebra table-horizontal table-highlight">
+        <thead>
+
+            <tr>
+                <th>Descripción</th>
+                <th>Costo</th>
+                <th>Clases al Mes</th>
+                <th>Clases</th>
+                <th>Activo</th>
+                <th>Editar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat='event in events | pagination: sizeOfPage * curPage | limitTo: sizeOfPage | filter: searchEvento'>
+                <td style="display:none">{{event.id}}</td>
+                <td>{{event.descripcion}}</td>
+                <td class="rightAlign">{{event.costo | currency :  $}}</td>
+                <td class="rightAlign">{{event.diasMes}}</td>
+                <td>{{event.claseStr}}</td>
+                <td>{{event.statusStr}}</td>
+                <td>
+                    <input type="button" value="Editar" name="edit" class="editBtn" ng-click="setEvent(event)"/>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="6">
+                    <div class="pagination">
+                        <button type="button" ng-click="curPage=0"> l< </button>
+                        <button type="button" ng-disabled="curPage === 0" ng-click="curPage=curPage - 1"> < </button>
+                        Página {{curPage + 1}} de {{ numberOfPages() }}
+                        <button type="button" ng-disabled="curPage >= events.length/sizeOfPage - 1" ng-click="curPage=curPage + 1"> > </button>
+                        <button type="button" ng-click="curPage=numberOfPages()-1"> >l </button>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+</div>

@@ -1,0 +1,74 @@
+<div>
+    <div class="searchContainer">
+        <input type="text" ng-model="searchInAndOut" placeholder="Movimiento..." id="search" class="search rounded"/>
+    </div>
+    <div id="messageContainer" ng-hide="showMessage" ng-class="{'errorDiv' : errorMessage, 'successDiv' : successMessage}">
+        {{generalMessage}} 
+    </div>
+    <form name="inAndOutForm" ng-submit="persistInsAndOuts()">
+        <fieldset>
+            <table class="table tableWithForm">
+                <thead>
+                    <tr>
+                        <th style="display:none">
+                            <input type="number" ng-model="entradaSalida.idEntradaSalida"/>
+                        </th>
+                        <th>
+                            <select ng-model="entradaSalida.idEvento.id" name="eventos" ng-options="event.id as event.descripcion for event in events">
+                            </select>
+                        </th>
+                        <th>
+                            <input type="text" ng-model="entradaSalida.descripcion" placeholder="Descripción"  class="rounded" name="descripcion" pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ0-9\s]*" title="Caracteres alfanuméricos"/>    
+                        </th>
+                        <th>
+                            <input type="number" ng-model="entradaSalida.cantidad" placeholder="Cantidad"  class="rounded" name="cantidad" required title="Caracteres numéricos"/>    
+                        </th>
+                        <th>
+                            <input type="date" ng-model="entradaSalida.fecha" placeholder="Fecha" class="rounded" name="fecha" required />    
+                        </th>
+                        <th >
+                            <input type="submit" class="addBtn" value="Guardar" name="add"/>
+
+                            <input type="reset" class="clearBtn" value="Limpiar" name="clear"/>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </fieldset>
+    </form>
+    <table class="table table-zebra table-horizontal table-highlight">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Evento</th>
+                <th>Descipción</th>
+                <th>Cantidad</th>
+                <th>Entrada / Salida</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat='inAndOut in entradasSalidas | pagination: sizeOfPage * curPage | limitTo: sizeOfPage | filter: searchInAndOut'>
+                <td style="display:none">{{inAndOut.idEntradaSalida}}</td>
+                <td>{{inAndOut.fecha | date: 'dd/MM/yyyy'}}</td>
+                <td>{{inAndOut.idEvento.descripcion}}</td>
+                <td>{{inAndOut.descripcion}}</td>
+                <td>{{inAndOut.cantidad | currency: $}}</td>
+                <td>{{inAndOut.entradaSalidaTxt}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5">
+                    <div class="pagination">
+                        <button type="button" ng-click="curPage=0"> l< </button>
+                        <button type="button" ng-disabled="curPage === 0" ng-click="curPage=curPage - 1"> < </button>
+                        Página {{curPage + 1}} de {{ numberOfPages() }}
+                        <button type="button" ng-disabled="curPage >= insAndOuts.length/sizeOfPage - 1" ng-click="curPage=curPage + 1"> > </button>
+                        <button type="button" ng-click="curPage=numberOfPages()-1"> >l </button>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+</div>

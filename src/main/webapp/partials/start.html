@@ -1,0 +1,41 @@
+<div>
+    <div class="searchContainer">
+        <input type="text" ng-model="searchCodigo" placeholder="Búsqueda..." id="search" class="search rounded"/>
+    </div>
+    <table class="table table-zebra table-horizontal table-highlight">
+        <thead>
+
+            <tr>
+                <th>Código</th>
+                <th>Alumno</th>
+                <th>Clases Restantes</th>
+                <th>Fecha Paquete</th>
+                <th>Fecha Vencimiento</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat='alumno in students | pagination: sizeOfPage * curPage | limitTo: sizeOfPage | filter: searchCodigo'>
+                <td style="display:none">{{alumno.idAlumno}}</td>
+                <td>{{alumno.codigo}}</td>
+                <td>{{alumno.nombre}}</td>
+                <td>{{alumno.clasesRestantes}}</td>
+                <td>{{alumno.fecha | date: 'dd/MM/yyyy'}}</td>
+                <td>{{alumno.fechaVencimiento | date: 'dd/MM/yyyy'}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="6">
+                    <div class="pagination">
+                        <button type="button" ng-click="curPage=0"> l< </button>
+                        <button type="button" ng-disabled="curPage === 0" ng-click="curPage=curPage - 1"> < </button>
+                        Página {{curPage + 1}} de {{ numberOfPages() }}
+                        <button type="button" ng-disabled="curPage >= students.length/sizeOfPage - 1" ng-click="curPage=curPage + 1"> > </button>
+                        <button type="button" ng-click="curPage=numberOfPages()-1"> >l </button>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+</div>

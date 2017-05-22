@@ -1,0 +1,70 @@
+<div>
+    <br>
+    <form name="workshopForm" ng-submit="saveWorkshopAttendence()">
+        <div class="formulario titleDiv">
+            <h1><span>Taller</span></h1>
+            <div class="formularioLeft">
+                <label class="etiqueta">Taller: </label>
+                <select name="talleres" id="talleres" ng-model="workshopAttendence.idTaller" 
+                        ng-options="workshop.taller for workshop in workshops" required="String"
+                        ng-change="getWorkshopAttendence(workshopAttendence.idTaller.idTaller)"> </select>
+                <label class="etiqueta"> Fecha: </label>
+                <label id="fecha">{{workshopAttendence.idTaller.fecha | date:'dd/MM/yyyy'}}</label>
+                <label class="etiqueta"> Costo: </label>
+                <label id="costo">{{workshopAttendence.idTaller.costo | currency:'$'}}</label>
+                <label class="etiqueta">Alumno: </label>
+                <select name="alumnos" id="alumnos" ng-model="workshopAttendence.idAlumno" ng-options="alumno.nombre for alumno in alumnos" required="String"> </select>
+            </div>
+            <div class="formularioRight">
+                <label class="etiqueta"> Descripción: </label>
+                <textarea name="descripcion" id="descripcion" ng-model="workshopAttendence.idTaller.descripcion" rows="10" cols="50" disabled="true"></textarea>
+                <label class="etiqueta"> Pago: </label>
+                <input type="number" step="any" ng-model="workshopAttendence.pago" id="pago" required="String"/>
+            </div>
+            <br style="clear:both;"/>
+            <div class="formulario-button">
+                <input type="submit" value="Guardar" class="addBtn"/>
+                <input type="reset" value="Limpiar" class="clearBtn"/>
+            </div>
+        </div>
+    </form>
+    <br>
+    <div id="messageContainer" ng-hide="showMessage" ng-class="{'errorDiv' : errorMessage, 'successDiv' : successMessage}">
+        {{generalMessage}} 
+    </div>
+    <br/>
+    <table class="table table-zebra table-horizontal table-highlight">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Pago</th>
+                <th>Fecha</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat='workshopAttendence in filtered = (workshopsAttendences| filter: search) | filter:search | pagination: sizeOfPage * curPage | limitTo: sizeOfPage'>
+                <td style="display:none">{{workshopAttendence.idAsistenciaTaller}}</td>
+                <td>{{workshopAttendence.idAlumno.nombre}}</td>
+                <td class="rightAlign">{{workshopAttendence.pago | currency:$}}</td>
+                <td>{{workshopAttendence.fecha | date: 'dd/MM/yyyy'}}</td>
+                <td>
+                    <input type="button" value="Eliminar" name="eliminar" class="clearBtn" ng-click="delete(workshopAttendence)"/>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5">
+                    <div class="pagination">
+                        <button type="button" ng-click="curPage = 0"> l< </button>
+                        <button type="button" ng-disabled="curPage === 0" ng-click="curPage = curPage - 1"> < </button>
+                        Página {{curPage + 1}} de {{ numberOfPages()}}
+                        <button type="button" ng-disabled="curPage >= workshopsAttendences.length / sizeOfPage - 1" ng-click="curPage = curPage + 1"> > </button>
+                        <button type="button" ng-click="curPage = numberOfPages() - 1"> >l </button>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>  

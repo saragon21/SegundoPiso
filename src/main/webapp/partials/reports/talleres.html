@@ -1,0 +1,67 @@
+<div>
+    <br>
+    <div class="formularioCenter titleDiv" id="filters">
+        <h1><span>Filtros</span></h1>
+        <div>
+            <form>
+                <ul>
+                    <li>
+                        <label class="etiqueta"> Fecha Inicio: </label>
+                        <input type="date" name="fecha" id="fecha" ng-model="filters.fechaInicio"/>
+                    </li>
+                    <li>
+                        <label class="etiqueta"> Fecha Fin: </label>
+                        <input type="date" name="fecha" id="fecha" ng-model="filters.fechaFin"/>
+                    </li>
+                    <li>
+                        <label class="etiqueta"> Taller: </label>
+                        <select ng-model="filters.taller" name="taller" 
+                            ng-options="workshop.id as workshop.taller for workshop in workshops" >
+                        </select>
+                    </li>
+                    <li style="text-align: center">
+                        <button value="Reporte" class="addBtn" ng-click="createReport()">Reporte</button>
+                        <button value="Reporte" class="clearBtn" ng-click="init(); showTable=false;">Limpiar</button>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+    <br>
+    <div id="messageContainer" ng-hide="showMessage" ng-class="{'errorDiv' : errorMessage, 'successDiv' : successMessage}">
+        {{generalMessage}} 
+    </div>
+    <table class="table table-zebra table-horizontal table-highlight" ng-show="showTable">
+        <thead>
+            <tr>
+                <th>Asistente</th>
+                <th>Pago</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat='pago in report.pagoTalleres | pagination: sizeOfPage * curPage | limitTo: sizeOfPage'>
+                <td style="display:none">{{pago.idPagoTaller}}</td>
+                <td>{{pago.idAlumno.nombre}}</td>
+                <td>{{pago.fecha | date:'dd/MM/yyyy'}}</td>
+                <td>{{pago.pago | currency : '$'}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5" class="rightAlign">{{report.pago | currency:$}}</td>
+            </tr>
+            <tr>
+                <td colspan="5">
+                    <div class="pagination">
+                        <button type="button" ng-click="curPage=0"> l< </button>
+                        <button type="button" ng-disabled="curPage === 0" ng-click="curPage=curPage - 1"> < </button>
+                        Página {{curPage + 1}} de {{ numberOfPages() }}
+                        <button type="button" ng-disabled="curPage >= report.movimientos.length/sizeOfPage - 1" ng-click="curPage=curPage + 1"> > </button>
+                        <button type="button" ng-click="curPage=numberOfPages()-1"> >l </button>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

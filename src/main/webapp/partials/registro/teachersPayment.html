@@ -1,0 +1,63 @@
+<div>
+    <div class="searchContainer">
+        <input type="text" ng-model="search" placeholder="Búsqueda..." id="search" class="search rounded"/>
+    </div>
+    <div id="messageContainer" ng-hide="showMessage" ng-class="{'errorDiv' : errorMessage, 'successDiv' : successMessage}">
+        {{generalMessage}} 
+    </div>
+    <form name="teachersPaymentForm">
+        <fieldset>
+            <div class="formularioCenter titleDiv">
+                <ul>
+                    <li>
+                        <label class="etiqueta"> Clase: </label>
+                        <select ng-model="teachersPayment.idClase" name="clase" ng-options="class as class.nombreClase for class in classes" ng-change="teacherByClass()">
+                        </select>
+                    </li>
+                    <li>
+                        <label class="etiqueta"> Maestro: </label>
+                        <select ng-model="teachersPayment.idMaestro" name="maestro" ng-options="teacher as teacher.nombre for teacher in teachers" ng-change="classByTeacher()">
+                        </select>
+                    </li>
+                    <li style="text-align: center">
+                        <input type="submit" class="editBtn" value="Consultar" name="edit" ng-click="consultarPago()"/>
+                        <input type="submit" class="addBtn" value="Pagar" name="add" ng-click="persistPayment()" ng-disabled="{{disablePaymentBtn}}"/>
+                    </li>
+                </ul>
+            </div>
+        </fieldset>
+    </form>
+    <table class="table table-zebra table-horizontal table-highlight" ng-show="!disablePaymentBtn">
+        <thead>
+            <tr>
+                <th>Maestro</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat='payment1 in payment.attendence | pagination: sizeOfPage * curPage | limitTo: sizeOfPage | filter: search'>
+                <td style="display:none">{{payment.idAsistencia}}</td>
+                <td>{{payment1.idAlumno.nombre}}</td>
+                <td>{{payment1.fecha | date: 'dd/MM/yyyy'}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" class="rightAlign">
+                    Pago: {{payment.pago | currency : '$'}}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="pagination">
+                        <button type="button" ng-click="curPage=0"> l< </button>
+                        <button type="button" ng-disabled="curPage === 0" ng-click="curPage=curPage - 1"> < </button>
+                        Página {{curPage + 1}} de {{ numberOfPages() }}
+                        <button type="button" ng-disabled="curPage >= payment.attendence.length/sizeOfPage - 1" ng-click="curPage=curPage + 1"> > </button>
+                        <button type="button" ng-click="curPage=numberOfPages()-1"> >l </button>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

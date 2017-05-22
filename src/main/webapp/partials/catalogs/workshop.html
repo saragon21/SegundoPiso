@@ -1,0 +1,83 @@
+<div>
+    <div class="searchContainer">
+        <input type="text" ng-model="searchTaller" placeholder="Taller..." id="search" class="search rounded"/>
+    </div>
+    <div id="messageContainer" ng-hide="showMessage" ng-class="{'errorDiv' : errorMessage, 'successDiv' : successMessage}">
+        {{generalMessage}} 
+    </div>
+    <br/>
+    <form name="workshopForm" ng-submit="persistWorkshop()">
+        <div class="formulario titleDiv">
+            <h1><span>Taller</span></h1>
+            <div class="formularioLeft">
+                <label class="etiqueta">Taller: </label>
+                <input type="text" name="taller" id="taller" ng-model="taller.taller" required="Campo Requerido"/>
+                <label class="etiqueta"> Fecha: </label>
+                <input type="date" name="fecha" id="fecha" ng-model="taller.fecha" 
+                       required="Campo Requerido" ng-change="validateDate()"/>
+                <label class="etiqueta"> Costo: </label>
+                <input type="number" step="any" name="costo" id="costo" ng-model="taller.costo" required="Campo Requerido"/>
+                <label class="etiqueta"> Porcentaje Artista: </label>
+                <input type="number" name="porecentajeArtista" id="porcentajeArtista" 
+                       ng-model="taller.porcentajeArtista" required="Campo Requerido"
+                       ng-change="calculateArtistPercentage()"/>
+            </div>
+            <div class="formularioRight">
+                <label class="etiqueta"> Descripción: </label>
+                <textarea name="descripcion" id="descripcion" ng-model="taller.descripcion" rows="9" cols="50"></textarea>
+                <label class="etiqueta"> Porcentaje Segundo Piso: </label>
+                <input type="number" name="porecentajeArtista" id="porcentajeArtista" 
+                       ng-model="taller.porcentajeSp" required="Campo Requerido"
+                       ng-change="calculateSpPercentage()"/>
+            </div>
+            <br style="clear:both;"/>
+            <div class="formulario-button">
+                <input type="submit" value="Guardar" class="addBtn"/>
+                <input type="reset" value="Limpiar" class="clearBtn"/>
+            </div>
+        </div>
+    </form>
+    <br/>
+    <table class="table table-zebra table-horizontal table-highlight">
+        <thead>
+
+            <tr>
+                <th>Taller</th>
+                <th>Fecha</th>
+                <th>Costo</th>
+                <th>% Artista</th>
+                <th>% SP</th>
+                <th>Descripción</th>
+                <th>Editar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat='workshop in workshops | pagination: sizeOfPage * curPage | limitTo: sizeOfPage | filter: searchTaller'>
+                <td style="display:none">{{workshop.id}}</td>
+                <td>{{workshop.taller}}</td>
+                <td>{{workshop.fecha | date: 'dd/MM/yyyy'}}</td>
+                <td class="rightAlign">{{workshop.costo | currency: $}}</td>
+                <td class="rightAlign">{{workshop.porcentajeArtista}}%</td>
+                <td class="rightAlign">{{workshop.porcentajeSp}}%</td>
+                <td>{{workshop.descripcion}}</td>
+                <td>
+                    <input type="button" value="Editar" name="edit" class="editBtn" ng-click="setWorkshop(workshop)"/>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="7">
+                    <div class="pagination">
+                        <button type="button" ng-click="curPage=0"> l< </button>
+                        <button type="button" ng-disabled="curPage === 0" ng-click="curPage=curPage - 1"> < </button>
+                        Página {{curPage + 1}} de {{ numberOfPages() }}
+                        <button type="button" ng-disabled="curPage >= workshops.length/sizeOfPage - 1" ng-click="curPage=curPage + 1"> > </button>
+                        <button type="button" ng-click="curPage=numberOfPages()-1"> >l </button>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+</div>

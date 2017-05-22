@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<div>
+    <div class="searchContainer">
+        <input type="text" ng-model="searchClase" placeholder="Clase..." id="search" class="search rounded"/>
+    </div>
+    <div id="messageContainer" ng-hide="showMessage" ng-class="{'errorDiv' : errorMessage, 'successDiv' : successMessage}">
+        {{generalMessage}} 
+    </div>
+    <form name="clazzForm" ng-submit="persistClass()">
+        <fieldset>
+            <table class="table tableWithForm">
+                <thead>
+                    <tr>
+                        <th style="display:none">
+                            <input type="number" ng-model="clase.idClase"/>
+                        </th>
+                        <th>
+                            <input type="text" ng-model="clase.nombreClase" placeholder="Clase"  class="rounded" name="nombreClase" required pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]*" title="Caracteres alfabéticos"/>
+                        </th>
+                        <th>
+                            <select ng-model="clase.idMaestro.id" name="maestro" ng-options="teacher.id as teacher.nombre for teacher in teachers">
+                            </select>
+                            
+                        </th>
+                        <th>
+                            <select ng-model="clase.status" name="status"  ng-options="activo.value as activo.status for activo in activos">
+                            </select>
+                        </th>
+                        <th >
+                            <input type="submit" class="addBtn" value="Guardar" name="add"/>
+
+                            <input type="reset" class="clearBtn" value="Limpiar" name="clear"/>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </fieldset>
+    </form>
+    <table class="table table-zebra table-horizontal table-highlight">
+        <thead>
+
+            <tr>
+                <th>Clase</th>
+                <th>Maestro</th>
+                <th>Activo</th>
+                <th>Editar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat='clazz in clazzes | pagination: sizeOfPage * curPage | limitTo: sizeOfPage | filter: searchClase'>
+                <td style="display:none">{{clazz.idClase}}</td>
+                <td>{{clazz.nombreClase}}</td>
+                <td>{{clazz.idMaestro.nombre}}</td>
+                <td>{{clazz.statusStr}}</td>
+                <td>
+                    <input type="button" value="Editar" name="edit" class="editBtn" ng-click="setClazz(clazz)"/>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="6">
+                    <div class="pagination">
+                        <button type="button" ng-click="curPage=0"> l< </button>
+                        <button type="button" ng-disabled="curPage === 0" ng-click="curPage=curPage - 1"> < </button>
+                        Página {{curPage + 1}} de {{ numberOfPages() }}
+                        <button type="button" ng-disabled="curPage >= clazzes.length/sizeOfPage - 1" ng-click="curPage=curPage + 1"> > </button>
+                        <button type="button" ng-click="curPage=numberOfPages()-1"> >l </button>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+</div>

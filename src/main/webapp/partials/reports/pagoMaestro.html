@@ -1,0 +1,75 @@
+<div>
+    <br>
+    <div class="formularioCenter titleDiv" id="filters">
+        <h1><span>Filtros</span></h1>
+        <div>
+            <form>
+                <ul>
+                    <li>
+                        <label class="etiqueta"> Fecha Inicio: </label>
+                        <input type="date" name="fecha" id="fecha" ng-model="filters.fechaInicio"/>
+                    </li>
+                    <li>
+                        <label class="etiqueta"> Fecha Fin: </label>
+                        <input type="date" name="fecha" id="fecha" ng-model="filters.fechaFin"/>
+                    </li>
+                    <li>
+                        <label class="etiqueta"> Clases: </label>
+                        <select ng-model="filters.clases" name="clase" 
+                            ng-options="clase.id as clase.nombreClase for clase in clases" ng-change="teacherByClass()">
+                        </select>
+                    </li>
+                    <li>
+                        <label class="etiqueta"> Maestro: </label>
+                        <select name="maestro" ng-model="filters.maestro"
+                            ng-options="teacher.id as teacher.nombre for teacher in teachers" ng-change="classByTeacher()">
+                        </select>
+                    </li>
+                    <li style="text-align: center">
+                        <button value="Reporte" class="addBtn" ng-click="createReport()">Reporte</button>
+                        <button value="Reporte" class="clearBtn" ng-click="init(); showTable=false;">Limpiar</button>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+    <br>
+    <div id="messageContainer" ng-hide="showMessage" ng-class="{'errorDiv' : errorMessage, 'successDiv' : successMessage}">
+        {{generalMessage}} 
+    </div>
+    <table class="table table-zebra table-horizontal table-highlight" ng-show="showTable">
+        <thead>
+            <tr>
+                <th>Maestro</th>
+                <th>Clase</th>
+                <th>Fecha</th>
+                <th>Pago</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat='pago in report.pagoMaestros | pagination: sizeOfPage * curPage | limitTo: sizeOfPage'>
+                <td style="display:none">{{pago.idPagoMaestro}}</td>
+                <td>{{pago.idMaestro.nombre}}</td>
+                <td>{{pago.idClase.nombreClase}}</td>
+                <td>{{pago.fecha | date:'dd/MM/yyyy'}}</td>
+                <td>{{pago.pago | currency : '$'}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5" class="rightAlign">{{report.pago | currency:$}}</td>
+            </tr>
+            <tr>
+                <td colspan="5">
+                    <div class="pagination">
+                        <button type="button" ng-click="curPage=0"> l< </button>
+                        <button type="button" ng-disabled="curPage === 0" ng-click="curPage=curPage - 1"> < </button>
+                        Página {{curPage + 1}} de {{ numberOfPages() }}
+                        <button type="button" ng-disabled="curPage >= report.movimientos.length/sizeOfPage - 1" ng-click="curPage=curPage + 1"> > </button>
+                        <button type="button" ng-click="curPage=numberOfPages()-1"> >l </button>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

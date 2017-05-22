@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+--> 
+<html ng-app="segundoPisoApp">
+    <head>
+        <title>Centro Cultural Segundo Piso</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="js/configFiles/angular.min.js"></script>
+        <script src="js/configFiles/angular-route.min.js"></script>
+        <script src="js/configFiles/angular-messages.min.js"></script>
+        <script src="js/configFiles/datatables-1.10.15.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/main.css">
+        <script src="js/app.js"></script>
+        <script src="js/router.js"></script>
+        <script src="js/filters/filters.js"></script>
+        <script src="js/factories/factories.js"></script>
+        <script src="js/directives/directives.js"></script>
+        <script src="js/controllers/loginCtrl.js"></script>
+        <script src="js/views/catalogos/studentCtrl.js"></script>
+        <script src="js/controllers/externCtrl.js"></script>
+        <script src="js/controllers/teacherCtrl.js"></script>
+        <script src="js/controllers/classCtrl.js"></script>
+        <script src="js/controllers/eventCtrl.js"></script>
+        <script src="js/controllers/movementsCtrl.js"></script>
+        <script src="js/controllers/workshopCtrl.js"></script>
+        <script src="js/controllers/attendenceCtrl.js"></script>
+        <script src="js/controllers/insAndOuts.js"></script>
+        <script src="js/controllers/workshopAttendence.js"></script>
+        <script src="js/controllers/homeCtrl.js"></script>
+        <script src="js/controllers/studentsReportCtrl.js"></script>
+        <script src="js/controllers/classesReportCtrl.js"></script>
+        <script src="js/controllers/teachersPaymentCtrl.js"></script>
+        <script src="js/controllers/teachersPaymentReportCtrl.js"></script>
+        <script src="js/controllers/workshopReportCtrl.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <div>
+                    <img src="img/logo.png" alt="logo" class="logo"/>
+                </div>
+                <div>
+                </div>
+            </header>
+            <div id="menu" ng-include src="'views/components/menu/menu.html'"> </div>
+            <section>
+                <div id="mainContainer" class="parent">
+                    <ng-view></ng-view>
+                </div>
+            </section>
+            <footer>
+                <div class="text">
+                    <p>3 Poniente 101 Local 1 D, San Andrés Cholula | 2221175219 | CCSegundoPiso</p>
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

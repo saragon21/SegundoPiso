@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<div>
+    <div class="searchContainer">
+        <input type="text" ng-model="searchExterno" placeholder="Externo..." id="search" class="search rounded"/>
+    </div>
+    <div id="messageContainer" ng-hide="showMessage" ng-class="{'errorDiv' : errorMessage, 'successDiv' : successMessage}">
+        {{generalMessage}} 
+    </div>
+    <form name="externForm" ng-submit="persistExtern()">
+        <fieldset>
+            <table class="table tableWithForm">
+                <thead>
+                    <tr>
+                        <th style="display:none">
+                            <input type="number" ng-model="extern.idAlumno"/>
+                        </th>
+                        <th>
+                            <input type="text" ng-model="extern.codigo" placeholder="No. Alumno"  class="rounded" name="codigo" required pattern="[\d]*"/>
+                        </th>
+                        <th>
+                            <input type="text" ng-model="extern.nombre" placeholder="Nombre"  class="rounded" name="nombre" required pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]*" title="Caracteres alfabéticos"/>
+                        </th>
+                        <th>
+                            <input type="email" ng-model="extern.correo" placeholder="Correo" class="rounded" name="correo"/>
+                        </th>
+                        <th>
+                            <input type="tel" ng-model="extern.telefono" placeholder="Teléfono"  class="rounded" name="telefono" pattern='\d{7,10}' title="Deben ser de 7 a 10 digitos"/>
+                        </th>
+                        <th>
+                            <select ng-model="extern.status" name="status"  ng-options="activo.value as activo.status for activo in activos">
+                            </select>
+                        </th>
+                        <th >
+                            <input type="submit" class="addBtn" value="Guardar" name="add"/>
+
+                            <input type="reset" class="clearBtn" value="Limpiar" name="clear"/>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </fieldset>
+    </form>
+    <table class="table table-zebra table-horizontal table-highlight">
+        <thead>
+
+            <tr>
+                <th>No. Externo</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Activo</th>
+                <th>Editar</th>
+                <th>Cambiar Alumno</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat='extern in externs | pagination: sizeOfPage * curPage | limitTo: sizeOfPage | filter: searchExterno'>
+                <td style="display:none">{{extern.idAlumno}}</td>
+                <td>{{extern.codigo}}</td>
+                <td>{{extern.nombre}}</td>
+                <td>{{extern.correo}}</td>
+                <td>{{extern.telefono}}</td>
+                <td>{{extern.statusStr}}</td>
+                <td>
+                    <input type="button" value="Editar" name="edit" class="editBtn" ng-click="setExtern(extern)"/>
+                </td>
+                <td>
+                    <input type="button" value="Cambiar Alumno" name="edit" class="editBtn" ng-click="changeToStudent(extern)"/>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="7">
+                    <div class="pagination">
+                        <button type="button" ng-click="curPage=0"> l< </button>
+                        <button type="button" ng-disabled="curPage === 0" ng-click="curPage=curPage - 1"> < </button>
+                        Página {{curPage + 1}} de {{ numberOfPages() }}
+                        <button type="button" ng-disabled="curPage >= externs.length/sizeOfPage - 1" ng-click="curPage=curPage + 1"> > </button>
+                        <button type="button" ng-click="curPage=numberOfPages()-1"> >l </button>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+</div>

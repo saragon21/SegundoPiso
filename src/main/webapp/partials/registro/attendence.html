@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<div ng-include="'partials/utils/messageModal.html'"></div>
+<div>
+    <div class="searchContainer">
+        <form>
+            <fieldset style="text-align: center">
+                <input type="text" ng-model="search.codigo" placeholder="Código..." id="searchCode" class="search rounded" ng-enter="selectStudent()"/>
+
+                <input type="text" ng-model="search.nombre" placeholder="Alumno..." id="searchName" class="search rounded"/>
+
+                <input type="reset" class="clearBtn" value="Limpiar" name="clear" ng-click="resetPage()"/>
+            </fieldset>
+        </form>
+    </div>
+        
+    <table class="table table-zebra table-horizontal table-highlight">
+        <thead>
+            <tr>
+                <th>No. Alumno</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat='student in filtered = (students| filter: search) | filter:search | pagination: sizeOfPage * curPage | limitTo: sizeOfPage' ng-dblclick="setStudent(student); jumpTo('studentInfo')">
+                <td style="display:none">{{student.idAlumno}}</td>
+                <td>{{student.codigo}}</td>
+                <td>{{student.nombre}}</td>
+                <td>{{student.correo}}</td>
+                <td>{{student.telefono}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5">
+                    <div class="pagination">
+                        <button type="button" ng-click="curPage = 0"> l< </button>
+                        <button type="button" ng-disabled="curPage === 0" ng-click="curPage = curPage - 1"> < </button>
+                        Página {{curPage + 1}} de {{ numberOfPages()}}
+                        <button type="button" ng-disabled="curPage >= students.length / sizeOfPage - 1" ng-click="curPage = curPage + 1"> > </button>
+                        <button type="button" ng-click="curPage = numberOfPages() - 1"> >l </button>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    <br>
+    <br>
+    <div>
+        <div class="info titleDiv" id="studentInfo">
+            <h1><span>Alumno</span></h1>
+            <label class="etiqueta">No. Alumno: </label>
+            <label class="personalInfo">{{asistencia.idAlumno.codigo}}</label>
+            <label class="etiqueta">Nombre: </label>
+            <label class="personalInfo">{{asistencia.idAlumno.nombre}}</label>
+            <label class="etiqueta">Correo: </label>
+            <label class="personalInfo">{{asistencia.idAlumno.correo}}</label>					
+        </div>
+        <br> 
+        <div id="messageContainer" ng-hide="showMessage" ng-class="{'errorDiv' : errorMessage, 'successDiv' : successMessage}">
+            {{generalMessage}} 
+        </div>
+        <br>
+        <form name="attendenceForm" ng-submit="saveAttendence(); jumpTo('messageContainer');">
+            <div class="formulario titleDiv">
+                <h1><span>Asistencia</span></h1>
+                <div class="formularioLeft">
+                    <label class="etiqueta"> Clase: </label>
+                    <select ng-model="asistencia.idClase" name="clase" ng-change="getTeachers()"
+                            ng-options="clase as clase.nombreClase for clase in classes | orderBy: clase.idClase">
+                    </select>
+                    <label class="etiqueta"> Fecha: </label>
+                    <input type="date" name="fecha" id="fecha" ng-model="asistencia.fecha"/>
+                </div>
+                <div class="formularioRight">
+                    <label class="etiqueta"> Maestro: </label>
+                    <select ng-model="asistencia.idMaestro" name="maestro"
+                            ng-options="teacher as teacher.nombre for teacher in teachers | orderBy: teacher.idMaestro">
+                    </select>
+                </div>
+                <br style="clear:both;"/>
+                
+                <div class="formulario-button">
+                    <input type="submit" value="Guardar" class="addBtn"/>
+                    <input type="reset" value="Limpiar" class="clearBtn"/>
+                </div>
+            </div>
+        </form>
+        <br>
+        <table class="table table-zebra table-horizontal table-highlight" id="tableAttendence">
+            <thead>
+
+                <tr>
+                    <th style="display:none"></th>
+                    <th>Fecha</th>
+                    <th>Clases Restantes</th>
+                    <th>Clase</th>
+                    <th>Maestro</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='attendence in attendences| pagination: sizeOfPageAtt * curPageAtt | limitTo: sizeOfPageAtt'>
+                    <td style="display:none">{{attendence.idAsistencia}}</td>
+                    <td>{{attendence.fecha | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{attendence.diasRestantes}}</td>
+                    <td>{{attendence.idClase.nombreClase}}</td>
+                    <td>{{attendence.idMaestro.nombre}}</td>
+                    <td>
+                        <input type="button" value="Eliminar" name="delete" class="clearBtn" ng-click="deleteAttendence(attendence.idAsistencia)"/>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6">
+                        <div class="pagination">
+                            <button type="button" ng-click="curPageAtt = 0"> l< </button>
+                            <button type="button" ng-disabled="curPageAtt === 0" ng-click="curPageAtt = curPageAtt - 1"> < </button>
+                            Página {{curPageAtt + 1}} de {{ numberOfPagesAtt()}}
+                            <button type="button" ng-disabled="curPageAtt >= attendences.length / sizeOfPageAtt - 1" ng-click="curPageAtt = curPageAtt + 1"> > </button>
+                            <button type="button" ng-click="curPageAtt = numberOfPagesAtt() - 1"> >l </button>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>      

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<div>
+    <div class="searchContainer">
+        <form>
+            <fieldset style="text-align: center">
+                <input type="text" ng-model="search.codigo" placeholder="Código..." id="searchCode" class="search rounded" ng-enter="selectStudent()"/>
+
+                <input type="text" ng-model="search.nombre" placeholder="Alumno..." id="searchName" class="search rounded"/>
+
+                <input type="reset" class="clearBtn" value="Limpiar" name="clear" ng-click="resetPage()"/>
+            </fieldset>
+        </form>
+    </div>
+        
+    <table class="table table-zebra table-horizontal table-highlight">
+        <thead>
+
+            <tr>
+                <th>No. Alumno</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat='student in filtered = (students| filter: search) | filter:search | pagination: sizeOfPage * curPage | limitTo: sizeOfPage' ng-dblclick="setStudent(student); jumpTo('studentInfo')">
+                <td style="display:none">{{student.idAlumno}}</td>
+                <td>{{student.codigo}}</td>
+                <td>{{student.nombre}}</td>
+                <td>{{student.correo}}</td>
+                <td>{{student.telefono}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="6">
+                    <div class="pagination">
+                        <button type="button" ng-click="curPage = 0"> l< </button>
+                        <button type="button" ng-disabled="curPage === 0" ng-click="curPage = curPage - 1"> < </button>
+                        Página {{curPage + 1}} de {{ numberOfPages()}}
+                        <button type="button" ng-disabled="curPage >= students.length / sizeOfPage - 1" ng-click="curPage = curPage + 1"> > </button>
+                        <button type="button" ng-click="curPage = numberOfPages() - 1"> >l </button>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    <br>
+    <br>
+    <div>
+        <div class="info titleDiv" id="studentInfo">
+            <h1><span>Alumno</span></h1>
+            <label class="etiqueta">No. Alumno: </label>
+            <label class="personalInfo">{{movimiento.idAlumno.codigo}}</label>
+            <label class="etiqueta">Nombre: </label>
+            <label class="personalInfo">{{movimiento.idAlumno.nombre}}</label>
+            <label class="etiqueta">Correo: </label>
+            <label class="personalInfo">{{movimiento.idAlumno.correo}}</label>					
+        </div>
+        <br> 
+        <div id="messageContainer" ng-hide="showMessage" ng-class="{'errorDiv' : errorMessage, 'successDiv' : successMessage}">
+            {{generalMessage}} 
+        </div>
+        <br>
+        <form name="movementForm" ng-submit="saveMovement(); jumpTo('messageContainer');">
+            <div class="formulario titleDiv">
+                <h1><span>Movimiento</span></h1>
+                <div class="formularioLeft">
+                    <label class="etiqueta"> Fecha: </label>
+                    <input type="date" name="fecha" id="fecha" ng-model="movimiento.fecha"/>
+                    <label class="etiqueta"> Descuento: </label>
+                    <input type="number" name="descuento" id="descuento" ng-model="movimiento.descuento" ng-keyup="calculateDiscount()" min="0"/>
+                </div>
+                <div class="formularioRight">
+                    <label class="etiqueta"> Evento: </label>
+                    <select ng-model="movimiento.idEvento" name="evento"  ng-change="calculateDiscount()" 
+                            ng-options="event as event.descripcion for event in events | orderBy: event.idEvento">
+                    </select>
+                    <label class="etiqueta"> Porcentaje: </label>
+                    <input type="checkbox" ng-model="movimiento.porcentaje" ng-change="calculateDiscount()"> 
+                </div>
+                <br style="clear:both;"/>
+                <div class="info">
+                    <label class="etiqueta">Precio: </label>
+                    <label class="personalInfo">{{movimiento.idEvento.costo| currency: $}}</label>
+                    <label class="etiqueta">Pago: </label>
+                    <label class="personalInfo">{{movimiento.pago| currency: $}}</label>
+                </div>
+                <div class="formulario-button">
+                    <input type="submit" value="Guardar" class="addBtn"/>
+                    <input type="reset" value="Limpiar" class="clearBtn"/>
+                </div>
+            </div>
+        </form>
+        <br>
+        <table class="table table-zebra table-horizontal table-highlight" id="tableMovements">
+            <thead>
+
+                <tr>
+                    <th>Fecha</th>
+                    <th>Evento</th>
+                    <th>Precio</th>
+                    <th>Descuento</th>
+                    <th>Pago</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='movement in movements| pagination: sizeOfPageMov * curPageMov | limitTo: sizeOfPageMov'>
+                    <td style="display:none">{{movement.idMovimiento}}</td>
+                    <td>{{movement.fechaInicio | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{movement.idEvento.descripcion}}</td>
+                    <td class="rightAlign">{{movement.idEvento.costo | currency : $}}</td>
+                    <td class="rightAlign">{{movement.descuento | discount: movement.porcentaje}}</td>
+                    <td class="rightAlign">{{movement.pago | currency: $}}</td>
+                    <td>
+                        <input type="button" value="Eliminar" name="delete" class="clearBtn" ng-click="deleteMovement(movement.idMovimiento)"/>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6">
+                        <div class="pagination">
+                            <button type="button" ng-click="curPageMov = 0"> l< </button>
+                            <button type="button" ng-disabled="curPageMov === 0" ng-click="curPageMov = curPageMov - 1"> < </button>
+                            Página {{curPageMov + 1}} de {{ numberOfPagesMov()}}
+                            <button type="button" ng-disabled="curPageMov >= movements.length / sizeOfPageMov - 1" ng-click="curPageMov = curPageMov + 1"> > </button>
+                            <button type="button" ng-click="curPageMov = numberOfPagesMov() - 1"> >l </button>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>      

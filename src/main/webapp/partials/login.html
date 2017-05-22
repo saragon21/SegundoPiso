@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<div class='children'>
+    <form class="box login" name="loginForm" novalidate ng-submit="login()">
+        <fieldset class="boxBody">
+            <div class="message" >
+                <label class="has-error">{{login.message}}</label>
+            </div>
+            
+        <div show-errors>
+                <label ng-class="{hasError: (loginForm.user.$dirty && loginForm.user.$invalid)}">
+                    Usuario 
+                    <span class="rightText" ng-show="((loginForm.user.$dirty && loginForm.user.$invalid) || loginForm.$submitted)">
+                        <label ng-show="loginForm.user.$error.required">Campo requerido</label>
+                    </span>
+                </label>
+                <input type="text" tabindex="1" placeholder="" required ng-model="usuario.usuario" name="user">
+            </div>
+            <div show-errors>
+                <label ng-class="{hasError: (loginForm.password.$dirty && loginForm.password.$invalid)}" >
+                    Contraseña
+                    <span class="rightText" ng-show="((loginForm.password.$dirty && loginForm.password.$invalid) || loginForm.$submitted)">
+                        <label ng-show="loginForm.password.$error.required ">Campo requerido</label>
+                    </span>
+                </label>
+                <input type="password" tabindex="2" required ng-model="usuario.password" name="password"/>
+            </div>
+        </fieldset>
+        <footer class='footerLogin'>
+            <input type="submit" class="btnLogin" tabindex="4" value="Login" name="login"/>
+        </footer>
+    </form>
+    
+</div>

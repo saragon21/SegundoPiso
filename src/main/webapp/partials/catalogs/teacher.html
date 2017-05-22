@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<div>
+    <div class="searchContainer">
+        <input type="text" ng-model="searchMaestro" placeholder="Maestro..." id="search" class="search rounded"/>
+    </div>
+    
+    <div class="formularioCenter titleDiv">
+        <h1><span>Maestro</span></h1>
+        <form name="teacherForm" ng-submit="persistTeacher()">
+            <input type="number" ng-model="maestro.idMaestro" hidden="true"/>
+            <ul>
+                <li>
+                    <label class="etiqueta"> Maestro:</label>
+                    <input type="text" ng-model="maestro.nombre" placeholder="Maestro"  class="rounded" name="nombre" required pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]*" title="Caracteres alfabéticos"/>
+                </li>
+                <li>
+                    <label class="etiqueta"> Correo: </label>
+                    <input type="email" ng-model="maestro.correo" placeholder="Correo" class="rounded" name="correo"/>
+                </li>
+                <li>
+                    <label class="etiqueta"> Télefono: </label>
+                    <input type="tel" ng-model="maestro.telefono" placeholder="Teléfono"  class="rounded" name="telefono" pattern='\d{7,10}' title="Deben ser de 7 a 10 digitos"/>
+                </li>
+                <li>
+                    <label class="etiqueta"> Tipo de Pago: </label>
+                    <select ng-model="maestro.porcentaje" name="tipoPago" required="true" ng-change="configurePayment()">
+                        <option value="true">Porcentaje</option>
+                        <option value="false">Fijo</option>
+                    </select>
+                </li>
+                <li>
+                    <label class="etiqueta"> {{paymentLabel}}: </label>
+                    <input type="number" ng-model="maestro.pago" placeholder="Pago" class="rounded" name="pago"/>
+                </li>
+                <li>
+                    <label class="etiqueta"> Activo: </label>
+                    <select ng-model="maestro.status" name="status" ng-options="activo.value as activo.status for activo in activos">
+                    </select>
+                </li>
+                <li style="text-align: center">
+                    <input type="submit" class="addBtn" value="Guardar" name="add"/>
+                    <input type="reset" class="clearBtn" value="Limpiar" name="clear"/>
+                </li>
+            </ul>
+        </form>
+    </div>
+    <br>
+    <div id="messageContainer" ng-hide="showMessage" ng-class="{'errorDiv' : errorMessage, 'successDiv' : successMessage}">
+        {{generalMessage}} 
+    </div>
+    <table class="table table-zebra table-horizontal table-highlight">
+        <thead>
+
+            <tr>
+                <th>Maestro</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Tipo Pago</th>
+                <th>Pago</th>
+                <th>Activo</th>
+                <th>Editar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat='teacher in teachers| pagination: sizeOfPage * curPage | limitTo: sizeOfPage | filter: searchMaestro'>
+                <td style="display:none">{{teacher.idMaestro}}</td>
+                <td>{{teacher.nombre}}</td>
+                <td>{{teacher.correo}}</td>
+                <td>{{teacher.telefono}}</td>
+                <td>{{teacher.porcentaje == true ? 'Porcentaje' : 'Fijo'}}</td>
+                <td>{{teacher.pago}}</td>
+                <td>{{teacher.statusStr}}</td>
+                <td>
+                    <input type="button" value="Editar" name="edit" class="editBtn" ng-click="setTeacher(teacher)"/>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="7">
+                    <div class="pagination">
+                        <button type="button" ng-click="curPage = 0"> l< </button>
+                        <button type="button" ng-disabled="curPage === 0" ng-click="curPage = curPage - 1"> < </button>
+                        Página {{curPage + 1}} de {{ numberOfPages()}}
+                        <button type="button" ng-disabled="curPage >= teachers.length / sizeOfPage - 1" ng-click="curPage = curPage + 1"> > </button>
+                        <button type="button" ng-click="curPage = numberOfPages() - 1"> >l </button>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+</div>

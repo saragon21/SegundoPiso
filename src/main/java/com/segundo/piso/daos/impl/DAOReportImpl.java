@@ -170,11 +170,12 @@ public class DAOReportImpl implements DAOReport {
         }
 
         if (filters.getFechaInicio() != null) {
-            criteria.add(Restrictions.ge("fecha", filters.getFechaInicio()));
+            System.out.println("FECHA INICIO" + filters.getFechaInicio());
+            criteria.add(Restrictions.sqlRestriction("DATE(fecha) >= " + filters.getFechaInicio()));
         }
 
         if (filters.getFechaFin() != null) {
-            criteria.add(Restrictions.le("fecha", filters.getFechaFin()));
+            criteria.add(Restrictions.sqlRestriction("DATE(fecha) <= " + filters.getFechaFin()));
         }
 
         if (filters.getMaestro() > 0) {

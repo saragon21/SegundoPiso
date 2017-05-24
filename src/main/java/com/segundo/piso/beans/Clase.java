@@ -13,10 +13,12 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -44,8 +46,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "Clase.findByLastModTime", query = "SELECT c FROM Clase c WHERE c.lastModTime = :lastModTime"),
     @NamedQuery(name = "Clase.findByLastModUser", query = "SELECT c FROM Clase c WHERE c.lastModUser = :lastModUser")})
 public class Clase extends Base implements Serializable {
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idClase")
-    private List<Horario> horarioList;
+    /*@OneToMany(cascade = CascadeType.ALL, mappedBy = "idClase")
+    private List<Horario> horarioList;*/
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -183,13 +185,13 @@ public class Clase extends Base implements Serializable {
         return nombreClase;
     }
 
-    @XmlTransient
+    /*@XmlTransient
     public List<Horario> getHorarioList() {
         return horarioList;
     }
 
     public void setHorarioList(List<Horario> horarioList) {
         this.horarioList = horarioList;
-    }
+    }*/
     
 }

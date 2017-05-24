@@ -39,6 +39,7 @@ public class ReportRest {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public List<ReporteClases> classesReport(Filters filters) {
+        System.out.println(filters);
         return reportService.classesReport(filters);
     }
     

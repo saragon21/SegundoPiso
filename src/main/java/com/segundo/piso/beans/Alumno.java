@@ -86,6 +86,10 @@ public class Alumno extends Base implements Serializable {
     private boolean alumno;
     @Transient
     private boolean fromStudent;
+    @Basic(optional = false)
+    @Column(name = "FECHA_NACIMIENTO")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaNacimiento;
     @OneToMany(mappedBy = "idAlumno")
     private List<AsistenciaTaller> asistenciaTallerList;
     
@@ -244,5 +248,13 @@ public class Alumno extends Base implements Serializable {
 
     public void setAsistenciaTallerList(List<AsistenciaTaller> asistenciaTallerList) {
         this.asistenciaTallerList = asistenciaTallerList;
+    }
+
+    public Date getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
     }
 }

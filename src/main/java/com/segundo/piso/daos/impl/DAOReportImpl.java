@@ -15,6 +15,7 @@ import com.segundo.piso.beans.ReporteClases;
 import com.segundo.piso.beans.ReporteMovimientosAlumno;
 import com.segundo.piso.beans.ReportePagoMaestros;
 import com.segundo.piso.daos.DAOReport;
+import com.segundo.piso.util.DateUtil;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
@@ -133,7 +134,8 @@ public class DAOReportImpl implements DAOReport {
                 .createAlias("attendence.idAlumno", "alumno")
                 .setProjection(Projections.projectionList()
                         .add(Projections.distinct(Projections.property("attendence.idAlumno")), "alumno")
-                        .add(Projections.property("attendence.idClase"), "clase"))
+                        .add(Projections.property("attendence.idClase"), "clase")
+                        )
                 .addOrder(Order.asc("clase.nombreClase"))
                 .addOrder(Order.asc("alumno.nombre"))
                 .setResultTransformer(Transformers.aliasToBean(ReporteClases.class));
@@ -170,12 +172,14 @@ public class DAOReportImpl implements DAOReport {
         }
 
         if (filters.getFechaInicio() != null) {
-            System.out.println("FECHA INICIO" + filters.getFechaInicio());
-            criteria.add(Restrictions.sqlRestriction("DATE(fecha) >= " + filters.getFechaInicio()));
+            String fechaInicio = DateUtil.formatDate(filters.getFechaInicio(), DateUtil.YYYY_MM_DD_HH_MM_SS);
+            System.out.println("FECHA INICIO" + fechaInicio);
+            criteria.add(Restrictions.sqlRestriction("DATE(fecha) >= '" + fechaInicio + "' "));
         }
 
         if (filters.getFechaFin() != null) {
-            criteria.add(Restrictions.sqlRestriction("DATE(fecha) <= " + filters.getFechaFin()));
+            String fechaFin = DateUtil.formatDate(filters.getFechaFin(), DateUtil.YYYY_MM_DD_HH_MM_SS);
+            criteria.add(Restrictions.sqlRestriction("DATE(fecha) <= '" + fechaFin + "' "));
         }
 
         if (filters.getMaestro() > 0) {

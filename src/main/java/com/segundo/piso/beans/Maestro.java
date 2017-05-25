@@ -14,6 +14,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -66,7 +67,7 @@ public class Maestro extends Base implements Serializable {
     @Basic(optional = false)
     @Column(name = "LAST_MOD_USER")
     private String lastModUser;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMaestro")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMaestro" , fetch = FetchType.EAGER)
     private List<Clase> claseList;
     @OneToMany(mappedBy = "idMaestro")
     private List<Asistencia> asistenciaList;
@@ -141,6 +142,7 @@ public class Maestro extends Base implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public List<Clase> getClaseList() {
         return claseList;
     }

@@ -71,7 +71,6 @@ public class Clase extends Base implements Serializable {
     private String lastModUser;
     @JoinColumn(name = "ID_MAESTRO", referencedColumnName = "ID_MAESTRO")
     @ManyToOne(optional = false)
-    @XmlElement
     private Maestro idMaestro;
     @OneToMany(mappedBy = "idClase")
     private List<Asistencia> asistenciaList;

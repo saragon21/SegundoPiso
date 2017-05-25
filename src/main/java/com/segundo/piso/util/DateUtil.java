@@ -28,6 +28,8 @@ public class DateUtil {
 
     public static final String YYYY_MM_DD = "yyyy-MM-dd";
     
+    public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
+    
     public static String formatDate(Date date, String formatStr) {
         SimpleDateFormat format = new SimpleDateFormat(formatStr);
         return format.format(date);

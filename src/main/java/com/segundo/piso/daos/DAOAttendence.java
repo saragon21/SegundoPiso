@@ -7,6 +7,7 @@
 package com.segundo.piso.daos;
 
 import com.segundo.piso.beans.Asistencia;
+import com.segundo.piso.beans.Filters;
 import java.util.List;
 
 /**
@@ -20,4 +21,6 @@ public interface DAOAttendence extends DAOBase<Asistencia> {
     long getDaysUsed(int idStudent, int idMovement);
     
     List<Asistencia> getAttendenceByClass(int idClase, int idMaestro, boolean pagadas);
+    
+    List<Asistencia> getAttendenceFiltered(Filters filters);
 }

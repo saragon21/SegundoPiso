@@ -26,4 +26,6 @@ public interface DAOStudent extends DAOBase<Alumno> {
     List<Alumno> getStudentsByStudent(boolean student);
     
     String getLastCode(boolean alumno);
+    
+    Alumno getStudentById(int idAlumno);
 }

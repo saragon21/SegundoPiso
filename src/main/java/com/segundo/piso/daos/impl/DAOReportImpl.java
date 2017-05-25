@@ -173,7 +173,6 @@ public class DAOReportImpl implements DAOReport {
 
         if (filters.getFechaInicio() != null) {
             String fechaInicio = DateUtil.formatDate(filters.getFechaInicio(), DateUtil.YYYY_MM_DD_HH_MM_SS);
-            System.out.println("FECHA INICIO" + fechaInicio);
             criteria.add(Restrictions.sqlRestriction("DATE(fecha) >= '" + fechaInicio + "' "));
         }
 

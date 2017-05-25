@@ -95,4 +95,12 @@ public class StudentRest {
         
         return students;
     }
+    
+    @Path("/alumnoById")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Alumno getStudent(@QueryParam("idAlumno") int idAlumno) {
+        Alumno alumno = studentService.getStudentById(idAlumno);
+        return alumno;
+    }
 }

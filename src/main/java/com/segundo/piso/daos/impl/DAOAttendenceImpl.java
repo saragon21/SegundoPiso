@@ -6,13 +6,18 @@
 package com.segundo.piso.daos.impl;
 
 import com.segundo.piso.beans.Asistencia;
+import com.segundo.piso.beans.Filters;
+import com.segundo.piso.beans.ReporteClases;
 import com.segundo.piso.daos.DAOAttendence;
+import com.segundo.piso.util.DateUtil;
 import java.util.List;
 import javax.persistence.NoResultException;
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,5 +74,39 @@ public class DAOAttendenceImpl extends DAOBaseImpl<Asistencia> implements DAOAtt
                 .add(Restrictions.eq("pagada", pagadas))
                 .addOrder(Order.asc("fecha"))
                 .list();
+    }
+    
+    @Override
+    @Transactional
+    public List<Asistencia> getAttendenceFiltered(Filters filters) {
+        Criteria criteria = this.sessionFactory.getCurrentSession()
+                .createCriteria(Asistencia.class, "attendence");
+        addFilters(filters, criteria);
+
+        return criteria.list();
+    }
+    
+    private void addFilters(Filters filters, Criteria criteria) {
+        if (filters.getClases() > 0) {
+            criteria.add(Restrictions.eq("idClase.id", filters.getClases()));
+        }
+
+        if (filters.getFechaInicio() != null) {
+            String fechaInicio = DateUtil.formatDate(filters.getFechaInicio(), DateUtil.YYYY_MM_DD_HH_MM_SS);
+            criteria.add(Restrictions.sqlRestriction("DATE(fecha) >= '" + fechaInicio + "' "));
+        }
+
+        if (filters.getFechaFin() != null) {
+            String fechaFin = DateUtil.formatDate(filters.getFechaFin(), DateUtil.YYYY_MM_DD_HH_MM_SS);
+            criteria.add(Restrictions.sqlRestriction("DATE(fecha) <= '" + fechaFin + "' "));
+        }
+
+        if (filters.getMaestro() > 0) {
+            criteria.add(Restrictions.eq("idMaestro.id", filters.getMaestro()));
+        }
+        
+        if (filters.getAlumno() > 0) {
+            criteria.add(Restrictions.eq("idAlumno.id", filters.getAlumno()));
+        }
     }
 }

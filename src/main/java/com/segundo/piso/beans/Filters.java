@@ -34,6 +34,9 @@ public class Filters {
     @XmlElement
     private boolean status;
     
+    @XmlElement
+    private int alumno;
+    
     public Date getFechaInicio() {
         return fechaInicio;
     }
@@ -80,5 +83,13 @@ public class Filters {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public int getAlumno() {
+        return alumno;
+    }
+
+    public void setAlumno(int alumno) {
+        this.alumno = alumno;
     }
 }

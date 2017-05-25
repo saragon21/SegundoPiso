@@ -89,6 +89,18 @@ public class DAOStudentImpl extends DAOBaseImpl<Alumno> implements DAOStudent {
         int newCode = Integer.valueOf(code);
         return String.valueOf(++newCode);
     }
-
     
+    @Override
+    @Transactional
+    public Alumno getStudentById(int idAlumno) {
+        try {
+            return (Alumno) this.sessionFactory.getCurrentSession()
+                    .createCriteria(Alumno.class)
+                    .add(Restrictions.eq("idAlumno", idAlumno))
+                    .uniqueResult();
+        } catch (NoResultException e) {
+            //TODO - Logger
+            return null;
+        }
+    }
 }

@@ -85,5 +85,9 @@ public class StudentService {
     
     public String getLastCode(boolean alumno) {
         return this.daoStudent.getLastCode(alumno);
-    }        
+    }   
+    
+    public Alumno getStudentById(int idAlumno) {
+        return this.daoStudent.getStudentById(idAlumno);
+    }
 }

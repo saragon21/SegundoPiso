@@ -7,6 +7,7 @@
 package com.segundo.piso.rest;
 
 import com.segundo.piso.beans.Asistencia;
+import com.segundo.piso.beans.Filters;
 import com.segundo.piso.beans.ReporteAsistencias;
 import com.segundo.piso.beans.Response;
 import com.segundo.piso.services.AttendenceService;
@@ -59,5 +60,12 @@ public class AttendenceRest {
     public ReporteAsistencias getAttendenceByClass(@QueryParam("idClase") int idClase,
             @QueryParam("pagadas") boolean pagadas, @QueryParam("idMaestro") int idMaestro) {
         return attendenceService.getAttendenceByClass(idClase, idMaestro, pagadas);
+    }
+    
+    @Path("/attendence/student")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Asistencia> getAttendenceByStudent(Filters filters) {
+        return attendenceService.getAttendenceFiltered(filters);
     }
 }

@@ -43,7 +43,7 @@ public class Asistencia implements Serializable {
     @Column(name = "DIAS_RESTANTES")
     private Integer diasRestantes;
     @JoinColumn(name = "ID_MAESTRO", referencedColumnName = "ID_MAESTRO")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Maestro idMaestro;
     @JoinColumn(name = "ID_CLASE", referencedColumnName = "ID_CLASE")
     @ManyToOne

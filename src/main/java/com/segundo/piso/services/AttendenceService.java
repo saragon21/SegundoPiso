@@ -7,6 +7,7 @@ package com.segundo.piso.services;
 
 import com.segundo.piso.beans.Asistencia;
 import com.segundo.piso.beans.Clase;
+import com.segundo.piso.beans.Filters;
 import com.segundo.piso.beans.Maestro;
 import com.segundo.piso.beans.Movimiento;
 import com.segundo.piso.beans.ReporteAsistencias;
@@ -191,5 +192,9 @@ public class AttendenceService {
         }
         
         return payment;
+    }
+    
+    public List<Asistencia> getAttendenceFiltered(Filters filter) {
+        return daoAttendence.getAttendenceFiltered(filter);
     }
 }

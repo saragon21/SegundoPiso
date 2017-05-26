@@ -6,6 +6,7 @@
 
 package com.segundo.piso.beans;
 
+import com.segundo.piso.util.DateUtil;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -21,6 +22,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -70,6 +72,8 @@ public class Asistencia implements Serializable {
     private Alumno idAlumno;
     @Column(name = "PAGADA")
     private boolean pagada;
+    @Transient
+    private String fechaStr;
 
     public Asistencia() {
     }
@@ -188,5 +192,10 @@ public class Asistencia implements Serializable {
 
     public void setPagada(boolean pagada) {
         this.pagada = pagada;
+    }
+    
+    public String getFechaStr() {
+        fechaStr = DateUtil.formatDate(fecha, DateUtil.DD_MM_YYYY);
+        return fechaStr;
     }
 }

@@ -69,7 +69,7 @@ public class Maestro extends Base implements Serializable {
     private String lastModUser;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMaestro" , fetch = FetchType.EAGER)
     private List<Clase> claseList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMaestro" , fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMaestro" , fetch = FetchType.LAZY)
     private List<Asistencia> asistenciaList;
     @Basic(optional = false)
     @Column(name = "STATUS")
